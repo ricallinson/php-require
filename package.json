@@ -1,0 +1,24 @@
+{
+    "name": "php-require",
+    "description": ".",
+    "version": "0.0.1",
+    "author": {
+        "name": "Richard S Allinson",
+        "email": "rsa@ricallinson.com"
+    },
+    "engines": {
+        "php": ">= 5.4.0"
+    },
+    "dependencies" : {
+    },
+    "devDependencies" : {
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:ricallinson/php-require.git"
+    },
+    "scripts": {
+        "test": "./test/run"
+    },
+    "license": "MIT"
+}
