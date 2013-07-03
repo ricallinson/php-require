@@ -101,7 +101,9 @@ class Module {
     */
 
     public static function extname($path) {
-        return ".php";
+        $parts = explode(DIRECTORY_SEPARATOR, $path);
+        $filename = explode(".", array_pop($parts));
+        return "." . $filename[count($filename)-1];
     }
 
     /*
@@ -259,7 +261,7 @@ class Module {
             throw new Exception("the module " . $this->filename . " has already been loaded.");
         }
 
-        $extension = Module::extname($this->filename) || '.php';
+        $extension = Module::extname($this->filename);
 
         if (!isset(Module::$extensions[$extension])) {
             $extension = '.php';
