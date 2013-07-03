@@ -12,7 +12,7 @@ header('Content-type: text/plain');
     Require the "php-require" module loader.
 */
 
-require("../npm-require.php");
+require("../index.php");
 
 /*
     $require modules.

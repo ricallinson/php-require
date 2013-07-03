@@ -43,7 +43,7 @@ print(round(measure($start), 5) . "\n");
 
 $start = measure(null);
 
-require_once("../npm-require.php");
+require_once("../index.php");
 
 $module = $require("./php-module");
 
@@ -59,7 +59,7 @@ print(round(measure($start), 5) . "\n");
 
 $start = measure(null);
 
-require_once("../npm-require.php");
+require_once("../index.php");
 
 $module = $require("./anon-module");
 

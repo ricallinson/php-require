@@ -13,7 +13,7 @@ Make a module __./math.php__;
 Use the module;
 
     <?php
-    require("./npm-require.php");
+    require("./node_modules/npm-require/index.php");
 
     $math = $require("./math");
     $math["sum"](1, 1);
