@@ -1,7 +1,7 @@
 <?php
 
 /*
-	For Quick debuging.
+    For Quick debuging.
 */
 
 error_reporting(E_ALL);
@@ -15,14 +15,14 @@ header('Content-type: text/plain');
 $cycle = 5000000;
 
 function measure($last) {
-	if ($last) {
-		return microtime(true) - $last;
-	}
-	return microtime(true);
+    if ($last) {
+        return microtime(true) - $last;
+    }
+    return microtime(true);
 }
 
 /*
-	Standard PHP Class.
+    Standard PHP Class.
 */
 
 $start = measure(null);
@@ -32,13 +32,13 @@ require_once("./class.php");
 $class = new PhpClass();
 
 for ($i = 0; $i < $cycle; $i++) {
-	$class->fn();
+    $class->fn();
 }
 
 print(round(measure($start), 5) . "\n");
 
 /*
-	Nodejs style module with PhpClass.
+    Nodejs style module with PhpClass.
 */
 
 $start = measure(null);
@@ -48,23 +48,23 @@ require_once("../npm-require.php");
 $module = $require("./php-module");
 
 for ($i = 0; $i < $cycle; $i++) {
-	$module->fn();
+    $module->fn();
 }
 
 print(round(measure($start), 5) . "\n");
 
 /*
-	Nodejs style module Function.
+    Nodejs style module Function.
 */
 
 $start = measure(null);
 
 require_once("../npm-require.php");
 
-$module = $require("./fn-module");
+$module = $require("./anon-module");
 
 for ($i = 0; $i < $cycle; $i++) {
-	$module["fn"]();
+    $module["fn"]();
 }
 
 print(round(measure($start), 5) . "\n");
