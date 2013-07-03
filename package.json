@@ -1,6 +1,6 @@
 {
     "name": "php-require",
-    "description": ".",
+    "description": "A Class that provides a nodejs style module loader so PHP can use npm.",
     "version": "0.0.1",
     "author": {
         "name": "Richard S Allinson",
