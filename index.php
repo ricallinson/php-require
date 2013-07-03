@@ -96,8 +96,6 @@ class Module {
 
     /*
         Returns the extension of the given $path.
-
-        Code needs writing.
     */
 
     public static function extname($path) {
