@@ -186,13 +186,17 @@ representing the current module.  In particular
 
 ### module->exports
 
-* {Object}
+* {Array}
 
 The `$module->exports` object is created by the Module system as a PHP array. Sometimes this is not
-acceptable, many want their module to be an instance of some class. To do this
+acceptable, many want their module to be an instance of some class or a variable. To do this
 assign the desired export object to `$module->exports`.
 
     $module->exports = new MyClass();
+
+or;
+
+    $module->exports = "My Variable";
 
 ### module->id
 
