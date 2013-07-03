@@ -287,7 +287,7 @@ class Module {
         $__dirname = Module::dirname($filename);
 
         $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
-            include($__filename);
+            require($__filename);
         };
 
         $fn($__filename, $__dirname, $this->exports, $this, $require);
