@@ -305,6 +305,11 @@ Module::$extensions[".php"] = function ($module, $filename) {
     $module->compile($content, $filename);
 };
 
+Module::$extensions[".json"] = function ($module, $filename) {
+    $content = file_get_contents($filename);
+    $module->exports = $content;
+};
+
 /*
     Setup standard globals.
 */
