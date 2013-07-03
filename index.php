@@ -9,10 +9,22 @@
 class Module {
 
     /*
+        Cache of the loaded modules.
+    */
+
+    private static $cache = [];
+
+    /*
         Map of supported extension loaders.
     */
 
     public static $extensions = [];
+
+    /*
+        Paths
+    */
+
+    private $paths = null;
 
     /*
         The actual module.
@@ -33,34 +45,22 @@ class Module {
     public $filename = null;
 
     /*
-        Cache of the loaded modules.
-    */
-
-    private static $cache = [];
-
-    /*
         Modules parent module.
     */
 
-    private $parent = null;
+    public $parent = null;
 
     /*
         Has this module been loaded.
     */
 
-    private $loaded = false;
+    public $loaded = false;
 
     /*
         Array of children;
     */
 
-    private $children = [];
-
-    /*
-        Paths
-    */
-
-    public $paths = null;
+    public $children = [];
 
     /*
         Construct.
