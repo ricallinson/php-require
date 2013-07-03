@@ -2,7 +2,7 @@
 
 A class that provides a nodejs style module loader so PHP can use npm (This may not be a good idea!).
 
-Make a module __./math__;
+Make a module __./math.php__;
 
 	<?php
 	$exports["sum"] = function ($a, $b) {
