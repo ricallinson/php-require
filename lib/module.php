@@ -1,9 +1,9 @@
 <?php
 
 /*
-    A Class that provides a nodejs style module loader so PHP to use npm.
+    A Class that provides a nodejs style module loader so PHP can use npm.
 
-    This may not be a good idea!
+    (This may not be a good idea!).
 */
 
 class Module {
@@ -96,6 +96,8 @@ class Module {
 
     /*
         Returns the extension of the given $path.
+
+        Code needs writing.
     */
 
     public static function extname($path) {
