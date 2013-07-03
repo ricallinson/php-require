@@ -288,9 +288,9 @@ class Module {
         $__filename = $filename;
         $__dirname = Module::dirname($filename);
 
-        $content = 'return function ($__filename, $__dirname, &$exports, &$module, $require) {' . $content . '};';
-
-        $fn = eval($content);
+        $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
+            include($__filename);
+        };
 
         $fn($__filename, $__dirname, $this->exports, $this, $require);
     }
