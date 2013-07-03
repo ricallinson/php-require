@@ -188,9 +188,14 @@ representing the current module.  In particular
 
 * {Array}
 
-The `$module->exports` object is created by the Module system as a PHP array. Sometimes this is not
-acceptable, many want their module to be an instance of some class or a variable. To do this
-assign the desired export object to `$module->exports`.
+The `$module->exports` object is created by the Module system as a PHP array, 
+you can add items to the array as needed. Sometimes this is not
+acceptable, many want their module to be an instance of some class or to be a variable. To do this
+assign the desired export value to `$module->exports`.
+
+    $module->exports["item"] = "My Item";
+
+or;
 
     $module->exports = new MyClass();
 
