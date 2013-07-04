@@ -124,15 +124,77 @@ describe("Module::resolve()", function () {
 
 describe("Module::resolveFilename()", function () {
 
+    /*
+        This is REALLY weird but handy.
+    */
+
+    $method = new ReflectionMethod("Module", "resolveFilename");
+    $method->setAccessible(true);
+
+    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/index.php"), null);
+
     it("should return a function", function () {
         asserts()->equal(method_exists("Module", "resolveFilename"), "function");
+    });
+
+    it("should return /path/not/found", function () use ($method, $parent) {
+        // $paths = Module::resolveFilename("/path/not/found");
+        $path = $method->invoke(new Module(null, null), "/path/not/found", $parent);
+        asserts()->equal($path, "/path/not/found");
+    });
+
+    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/index");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/index.php");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/config.json", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/config.json");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/config.json") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/math");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
+        // $paths = Module::resolveFilename("./index");
+        $path = $method->invoke(new Module(null, null), "./index", $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        // $paths = Module::resolveFilename("math");
+        $path = $method->invoke(new Module(null, null), "math", $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
     });
 });
 
 describe("Module::nodeModulePaths()", function () {
 
     /*
-        This is REALLY weird.
+        This is REALLY weird but handy.
     */
 
     $method = new ReflectionMethod("Module", "nodeModulePaths");
