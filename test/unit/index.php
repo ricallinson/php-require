@@ -82,7 +82,7 @@ describe("Module::extname()", function () {
 describe("Module::resolve()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "resolve"), true);
+        asserts()->equal(method_exists("Module", "resolve"), false);
     });
 
     it("should return my/dir/name/file.php", function () {
