@@ -114,7 +114,13 @@ class Module {
     public static function resolve(/* func_get_args() */) {
 
         $args = func_get_args();
-        $root = $args[0][0] == DIRECTORY_SEPARATOR ? DIRECTORY_SEPARATOR : "";
+
+        if ($args[0] && $args[0][0]) {
+            $root = $args[0][0] == DIRECTORY_SEPARATOR ? DIRECTORY_SEPARATOR : "";
+        } else {
+            $root = "";
+        }
+        
         $parts = explode(DIRECTORY_SEPARATOR, join(DIRECTORY_SEPARATOR, $args));
         $paths = array();
 
