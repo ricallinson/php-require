@@ -32,7 +32,8 @@ one-to-one correspondence.  As an example, `foo.php` loads the module
 The contents of `foo.php`:
     
     <?php
-    require("../../index.php");
+    require("../node_modules/php-require/index.php");
+
     $circle = $require('./circle.php');
     print('The area of a circle of radius 4 is ' . $circle["area"](4));
 
