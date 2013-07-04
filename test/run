@@ -1,2 +1,3 @@
-cd ./test/unit
-php ./index.php
+cd ./test
+php fake-mocha.php
+exit $?

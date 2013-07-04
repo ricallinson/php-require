@@ -1,8 +1,7 @@
 <?php
 
-require("./fake-mocha.php");
 require("./fake-asserts.php");
-require("../../index.php");
+require("../index.php");
 
 describe("php-require", function () {
 
