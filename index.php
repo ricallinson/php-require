@@ -12,13 +12,13 @@ class Module {
         Cache of the loaded modules.
     */
 
-    private static $cache = [];
+    private static $cache = array();
 
     /*
         Map of supported extension loaders.
     */
 
-    public static $extensions = [];
+    public static $extensions = array();
 
     /*
         Paths
@@ -36,7 +36,7 @@ class Module {
         The actual module.
     */
 
-    public $exports = [];
+    public $exports = array();
 
     /*
         Absolute path to the file.
@@ -60,7 +60,7 @@ class Module {
         Array of children;
     */
 
-    public $children = [];
+    public $children = array();
 
     /*
         Construct.
@@ -86,12 +86,9 @@ class Module {
 
         $result = explode(DIRECTORY_SEPARATOR, $path);
 
-        if (!$result[0] && !$result[1]) {
-            // No dirname whatsoever
-            return '.';
-        }
+        $dirname = implode(DIRECTORY_SEPARATOR, array_slice($result, 0, - 1));
 
-        return implode(DIRECTORY_SEPARATOR, array_slice($result, 0, - 1));
+        return $dirname ? $dirname : ".";
     }
 
     /*
@@ -100,7 +97,11 @@ class Module {
 
     public static function extname($path) {
         $parts = explode(DIRECTORY_SEPARATOR, $path);
-        $filename = explode(".", array_pop($parts));
+        $last = array_pop($parts);
+        if (strrpos($last, ".") === false) {
+            return null;
+        }
+        $filename = explode(".", $last);
         return "." . $filename[count($filename)-1];
     }
 
@@ -115,7 +116,7 @@ class Module {
         $args = func_get_args();
         $root = $args[0][0] == DIRECTORY_SEPARATOR ? DIRECTORY_SEPARATOR : "";
         $parts = explode(DIRECTORY_SEPARATOR, join(DIRECTORY_SEPARATOR, $args));
-        $paths = [];
+        $paths = array();
 
         foreach($parts as &$part) {
             if ($part == ".") {
@@ -142,7 +143,7 @@ class Module {
 
         $abspath = $root . join(DIRECTORY_SEPARATOR, $paths);
 
-        return $abspath;
+        return $abspath ? $abspath : "/";
     }
 
     /*
@@ -153,14 +154,14 @@ class Module {
 
     private static function resolveFilename($request, $parent) {
 
-        $paths = [];
+        $paths = array();
 
         if ($request[0] == DIRECTORY_SEPARATOR) {
             // If $request starts with a "/" then do nothing.
-            $paths = [$request];
+            $paths = array($request);
         } else if ($request[0] == ".") {
             // If $request starts with a "." then resolve it.
-            $paths = [Module::resolve(Module::dirname($parent->filename), $request)];
+            $paths = array(Module::resolve(Module::dirname($parent->filename), $request));
         } else {
             // If request starts with neither then check the parent.
             foreach ($parent->paths as $path) {
@@ -200,13 +201,13 @@ class Module {
         // note: this approach *only* works when the path is guaranteed
         // to be absolute.  Doing a fully-edge-case-correct path.split
         // that works on both Windows and Posix is non-trivial.
-        $paths = [];
+        $paths = array();
         $parts = explode(DIRECTORY_SEPARATOR, $from);
         $pos = 0;
 
         foreach ($parts as $tip) {
             if ($tip != "node_modules") {
-                $dir = implode(DIRECTORY_SEPARATOR, array_merge(array_slice($parts, 0, $pos + 1), ["node_modules"]));
+                $dir = implode(DIRECTORY_SEPARATOR, array_merge(array_slice($parts, 0, $pos + 1), array("node_modules")));
                 array_push($paths, $dir);
             }
             $pos = $pos + 1;
