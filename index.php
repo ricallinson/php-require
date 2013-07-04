@@ -272,20 +272,17 @@ class Module {
     }
 
     /*
-        Uses "eval" to compile the given $content.
+        Compile the module file by requiring it in a closed scope.
     */
 
-    public function compile($content, $filename) {
-
-        // Remove <?php
-        $content = str_replace("<?php", "", $content);
+    public function compile() {
 
         $require = function ($request) {
             return Module::loadModule($request, $this, false);
         };
 
-        $__filename = $filename;
-        $__dirname = Module::dirname($filename);
+        $__filename = $this->filename;
+        $__dirname = Module::dirname($this->filename);
 
         $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
             require($__filename);
@@ -300,8 +297,7 @@ class Module {
 */
 
 Module::$extensions[".php"] = function ($module, $filename) {
-    $content = file_get_contents($filename);
-    $module->compile($content, $filename);
+    $module->compile();
 };
 
 Module::$extensions[".json"] = function ($module, $filename) {

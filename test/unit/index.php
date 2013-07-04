@@ -19,7 +19,7 @@ describe("php-require", function () {
 describe("Module::dirname()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "dirname"), "function");
+        asserts()->equal(method_exists("Module", "dirname"), true);
     });
 
     it("should return /my/dir", function () {
@@ -61,7 +61,7 @@ describe("Module::dirname()", function () {
 describe("Module::extname()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "extname"), "function");
+        asserts()->equal(method_exists("Module", "extname"), true);
     });
 
     it("should return .php", function () {
@@ -83,7 +83,7 @@ describe("Module::extname()", function () {
 describe("Module::resolve()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "resolve"), "function");
+        asserts()->equal(method_exists("Module", "resolve"), true);
     });
 
     it("should return my/dir/name/file.php", function () {
@@ -136,10 +136,10 @@ describe("Module::resolveFilename()", function () {
     $method = new ReflectionMethod("Module", "resolveFilename");
     $method->setAccessible(true);
 
-    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/index.php"), null);
+    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "resolveFilename"), "function");
+        asserts()->equal(method_exists("Module", "resolveFilename"), true);
     });
 
     it("should return /path/not/found", function () use ($method, $parent) {
@@ -148,25 +148,32 @@ describe("Module::resolveFilename()", function () {
         asserts()->equal($path, "/path/not/found");
     });
 
-    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
-        $request = Module::resolve(__DIR__, "../../fixtures");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/math");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
-        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
     });
 
-    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
-        $request = Module::resolve(__DIR__, "../../fixtures/index");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/math/index");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
-        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
     });
 
-    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
-        $request = Module::resolve(__DIR__, "../../fixtures/index.php");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/math/index.php");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
-        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
+    });
+
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
+        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/tester/refect");
+        // $paths = Module::resolveFilename($request);
+        $path = $method->invoke(new Module(null, null), $request, $parent);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/tester/refect.php") !== false, true);
     });
 
     it("should return /php-require/test/fixtures/config.json", function () use ($method, $parent) {
@@ -177,16 +184,9 @@ describe("Module::resolveFilename()", function () {
     });
 
     it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
-        $request = Module::resolve(__DIR__, "../../fixtures/node_modules/math");
-        // $paths = Module::resolveFilename($request);
-        $path = $method->invoke(new Module(null, null), $request, $parent);
-        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
-    });
-
-    it("should return /php-require/test/fixtures/index.php", function () use ($method, $parent) {
         // $paths = Module::resolveFilename("./index");
         $path = $method->invoke(new Module(null, null), "./index", $parent);
-        asserts()->equal(strrpos($path, "/php-require/test/fixtures/index.php") !== false, true);
+        asserts()->equal(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false, true);
     });
 
     it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
@@ -206,7 +206,7 @@ describe("Module::nodeModulePaths()", function () {
     $method->setAccessible(true);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "nodeModulePaths"), "function");
+        asserts()->equal(method_exists("Module", "nodeModulePaths"), true);
     });
 
     it("should return a list of 5 paths", function () use ($method) {
@@ -230,28 +230,38 @@ describe("Module::nodeModulePaths()", function () {
 
 describe("Module::loadModule()", function () {
 
-    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/index.php"), null);
+    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "loadModule"), "function");
+        asserts()->equal(method_exists("Module", "loadModule"), true);
     });
 
-    it("should return a", function () use ($parent) {
+    it("should return a Closure", function () use ($parent) {
         $module = Module::loadModule("math", $parent, false);
         asserts()->equal(get_class($module["sum"]), "Closure");
-    });
-});
-
-describe("module->load()", function () {
-
-    it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "load"), "function");
     });
 });
 
 describe("module->compile()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "compile"), "function");
+        asserts()->equal(method_exists("Module", "compile"), true);
+    });
+
+    it("should return 2", function () {
+        $module = new Module(Module::resolve(__DIR__, "../../fixtures/node_modules/tester/refect.php"), null);
+        asserts()->equal(count($module->exports), 0);
+        $module->compile();
+        asserts()->equal(count($module->exports), 2);
+
+        asserts()->equal($module->exports["filename"], $module->filename);
+        asserts()->equal($module->exports["dirname"], Module::dirname($module->filename));
+    });
+});
+
+describe("module->load()", function () {
+
+    it("should return a function", function () {
+        asserts()->equal(method_exists("Module", "load"), true);
     });
 });
