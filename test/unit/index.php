@@ -9,6 +9,11 @@ describe("php-require", function () {
     it("should return true", function () {
         asserts()->equal(class_exists("Module"), true);
     });
+
+    it("should return /fake", function () {
+        $module = new Module("/fake", null);
+        asserts()->equal($module->id, "/fake");
+    });
 });
 
 describe("Module::dirname()", function () {
@@ -225,8 +230,15 @@ describe("Module::nodeModulePaths()", function () {
 
 describe("Module::loadModule()", function () {
 
+    $parent = new Module(Module::resolve(__DIR__, "../../fixtures/index.php"), null);
+
     it("should return a function", function () {
         asserts()->equal(method_exists("Module", "loadModule"), "function");
+    });
+
+    it("should return a", function () use ($parent) {
+        $module = Module::loadModule("math", $parent, false);
+        asserts()->equal(get_class($module["sum"]), "Closure");
     });
 });
 

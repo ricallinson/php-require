@@ -217,7 +217,7 @@ class Module {
     }
 
     /*
-        Load a module.
+        Load a module (this is the require function).
     */
 
     public static function loadModule($request, $parent, $isMain) {
