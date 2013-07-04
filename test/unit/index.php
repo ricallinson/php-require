@@ -242,6 +242,13 @@ describe("Module::loadModule()", function () {
     });
 });
 
+describe("module->load()", function () {
+
+    it("should return a function", function () {
+        asserts()->equal(method_exists("Module", "load"), true);
+    });
+});
+
 describe("module->compile()", function () {
 
     it("should return a function", function () {
@@ -256,12 +263,5 @@ describe("module->compile()", function () {
 
         asserts()->equal($module->exports["filename"], $module->filename);
         asserts()->equal($module->exports["dirname"], Module::dirname($module->filename));
-    });
-});
-
-describe("module->load()", function () {
-
-    it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "load"), true);
     });
 });
