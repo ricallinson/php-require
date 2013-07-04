@@ -20,15 +20,6 @@ class FakeMocha {
         print("|");
     }
 
-    static public function _renderError($group, $test, $err) {
-        print("\n");
-        print($group . ": " . $test . "\n\n");
-        print("\t" . $err->getMessage() . "\n");
-        print("\n");
-        print($err->getTraceAsString() . "\n");
-        print("\n");
-    }
-
     static public function renderEnd($errors) {
 
         foreach ($errors as $error) {
