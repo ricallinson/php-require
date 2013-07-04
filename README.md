@@ -1,5 +1,7 @@
 # Php-require
 
+[![Build Status](https://secure.travis-ci.org/ricallinson/php-require.png?branch=master)](http://travis-ci.org/ricallinson/php-require)
+
 A [PHP](http://php.net/) class that provides a [nodejs style module](http://nodejs.org/api/modules.html) loader so [PHP](http://php.net/) can use [npm](https://npmjs.org/). This may not be a good idea!
 
 Make a module __./math.php__;
