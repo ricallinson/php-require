@@ -1,0 +1,3 @@
+[submodule "php-tester"]
+	path = php-tester
+	url = git@github.com:ricallinson/php-tester.git
