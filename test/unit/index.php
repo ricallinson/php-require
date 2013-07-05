@@ -1,4 +1,5 @@
 <?php
+use php_require\Module;
 
 require("./fake-asserts.php");
 require("../index.php");
@@ -6,7 +7,7 @@ require("../index.php");
 describe("php-require", function () {
 
     it("should return true", function () {
-        asserts()->equal(class_exists("Module"), true);
+        asserts()->equal(class_exists("php_require\Module"), true);
     });
 
     it("should return /fake", function () {
@@ -18,7 +19,7 @@ describe("php-require", function () {
 describe("Module::dirname()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "dirname"), true);
+        asserts()->equal(method_exists("php_require\Module", "dirname"), true);
     });
 
     it("should return /my/dir", function () {
@@ -60,7 +61,7 @@ describe("Module::dirname()", function () {
 describe("Module::extname()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "extname"), true);
+        asserts()->equal(method_exists("php_require\Module", "extname"), true);
     });
 
     it("should return .php", function () {
@@ -82,7 +83,7 @@ describe("Module::extname()", function () {
 describe("Module::resolve()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "resolve"), true);
+        asserts()->equal(method_exists("php_require\Module", "resolve"), true);
     });
 
     it("should return my/dir/name/file.php", function () {
@@ -132,13 +133,13 @@ describe("Module::resolveFilename()", function () {
         This is REALLY weird but handy.
     */
 
-    $method = new ReflectionMethod("Module", "resolveFilename");
+    $method = new ReflectionMethod("php_require\Module", "resolveFilename");
     $method->setAccessible(true);
 
     $parent = new Module(Module::resolve(__DIR__, "../../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "resolveFilename"), true);
+        asserts()->equal(method_exists("php_require\Module", "resolveFilename"), true);
     });
 
     it("should return /path/not/found", function () use ($method, $parent) {
@@ -201,11 +202,11 @@ describe("Module::nodeModulePaths()", function () {
         This is REALLY weird but handy.
     */
 
-    $method = new ReflectionMethod("Module", "nodeModulePaths");
+    $method = new ReflectionMethod("php_require\Module", "nodeModulePaths");
     $method->setAccessible(true);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "nodeModulePaths"), true);
+        asserts()->equal(method_exists("php_require\Module", "nodeModulePaths"), true);
     });
 
     it("should return a list of 5 paths", function () use ($method) {
@@ -232,7 +233,7 @@ describe("Module::loadModule()", function () {
     $parent = new Module(Module::resolve(__DIR__, "../../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "loadModule"), true);
+        asserts()->equal(method_exists("php_require\Module", "loadModule"), true);
     });
 
     it("should return a Closure", function () use ($parent) {
@@ -244,14 +245,14 @@ describe("Module::loadModule()", function () {
 describe("module->load()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "load"), true);
+        asserts()->equal(method_exists("php_require\Module", "load"), true);
     });
 });
 
 describe("module->compile()", function () {
 
     it("should return a function", function () {
-        asserts()->equal(method_exists("Module", "compile"), true);
+        asserts()->equal(method_exists("php_require\Module", "compile"), true);
     });
 
     it("should return 2", function () {

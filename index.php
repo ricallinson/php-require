@@ -1,4 +1,5 @@
 <?php
+namespace php_require;
 
 /*
     A Class that provides a nodejs style module loader so PHP can use npm.
