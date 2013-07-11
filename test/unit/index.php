@@ -39,7 +39,7 @@ describe("Module::dirname()", function () {
 
     it("should return .", function () {
         $name = Module::dirname("/my");
-        asserts()->equal($name, ".");
+        asserts()->equal($name, "/");
     });
 
     it("should return .", function () {
@@ -54,7 +54,7 @@ describe("Module::dirname()", function () {
 
     it("should return .", function () {
         $name = Module::dirname("/");
-        asserts()->equal($name, ".");
+        asserts()->equal($name, "/");
     });
 });
 

@@ -85,9 +85,7 @@ class Module {
 
     public static function dirname($path) {
 
-        $result = explode(DIRECTORY_SEPARATOR, $path);
-
-        $dirname = implode(DIRECTORY_SEPARATOR, array_slice($result, 0, - 1));
+        $dirname = dirname($path);
 
         return $dirname ? $dirname : ".";
     }
