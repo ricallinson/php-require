@@ -37,4 +37,5 @@ function it($text, $fn) {
 }
 
 $tester->renderer($renderer);
-$tester->run(getcwd() . DIRECTORY_SEPARATOR . "unit");
+$errors = $tester->run(getcwd() . DIRECTORY_SEPARATOR . "unit");
+exit($errors);
