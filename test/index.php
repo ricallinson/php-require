@@ -8,20 +8,13 @@ use php_require\php_tester\Tester;
 error_reporting(E_ALL);
 ini_set('display_errors', 'on');
 
-/*
-	We have to fake some stuff as we can't use "php-require" (because we are testing it).
-*/
+$module = new stdClass();
 
-class FakeRequire {
-	public $exports = array();
-}
-$module = new FakeRequire();
-
-require(__DIR__ . "../../php-tester/lib/tester.php");
+require(__DIR__ . "../../node_modules/php-tester/lib/tester.php");
 
 $tester = $module->exports;
 
-require(__DIR__ . "../../php-tester/lib/simple.php");
+require(__DIR__ . "../../node_modules/php-tester/lib/simple.php");
 
 $renderer = $module->exports;
 

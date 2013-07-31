@@ -1,6 +1,0 @@
-[submodule "php-tester"]
-	path = php-tester
-	url = https://github.com/ricallinson/php-tester.git
-[submodule "php-path"]
-	path = php-path
-	url = https://github.com/ricallinson/php-path.git

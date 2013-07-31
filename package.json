@@ -10,8 +10,10 @@
         "php": ">= 5.4.0"
     },
     "dependencies" : {
+        "php-path": "git://github.com/ricallinson/php-path.git#master"
     },
     "devDependencies" : {
+        "php-tester": "git://github.com/ricallinson/php-tester.git#master"
     },
     "repository": {
         "type": "git",

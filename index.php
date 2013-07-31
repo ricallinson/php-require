@@ -121,7 +121,7 @@ class Module {
     private function loadNativeModules() {
 
         foreach (Module::$nativeModules as $request) {
-            $filename = __DIR__ . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . "node_modules" . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
             $module = new Module($filename, $this);
             Module::$cache[$filename] = $module;
             $module->compile();
@@ -209,7 +209,7 @@ class Module {
     public static function loadModule($request, $parent=null, $isMain=false) {
 
         if (in_array($request, Module::$nativeModules)) {
-            $filename = __DIR__ . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . "node_modules" . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
         } else {
             $filename = Module::resolveFilename($request, $parent);
         }

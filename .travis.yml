@@ -7,5 +7,7 @@ php:
 
 before_install:
   - git submodule update --init --recursive
+  - sudo apt-get install node
+  - npm i
 
 script: ./test/run
