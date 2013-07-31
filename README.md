@@ -2,13 +2,15 @@
 
 [![Build Status](https://secure.travis-ci.org/ricallinson/php-require.png?branch=master)](http://travis-ci.org/ricallinson/php-require)
 
-A [PHP](http://php.net/) class that provides a [nodejs style module](http://nodejs.org/api/modules.html) loader so [PHP](http://php.net/) can use [npm](https://npmjs.org/). This may not be a good idea!
+A [PHP](http://php.net/) class that provides a [nodejs style module](http://nodejs.org/api/modules.html) loader so [PHP](http://php.net/) can use [npm](https://npmjs.org/).
 
 ## Exmaple
 
 Make a module __./math.php__;
 
     <?php
+    namespace php_require\my_module;
+
     $exports["sum"] = function ($a, $b) {
         return $a + $b;
     };
@@ -44,6 +46,8 @@ The contents of `foo.php`:
 The contents of `circle.php`:
 
     <?php
+    namespace php_require\circle;
+
     $PI = pi();
 
     $exports["area"] = function ($r) use ($PI) {
@@ -63,6 +67,8 @@ for augmentation only. If you are exporting a single item such as a
 constructor you will want to use `$module->exports` directly instead.
 
     <?php
+    namespace php_require\my_class;
+
     class MyConstructor {
         function __construct() {
             
@@ -79,13 +85,13 @@ Variables local to the module will be private. In this example the variable `$PI
 private to `circle.php`. However, as in this example, if you are using an anonymous function
 you will still have to use the `use()` keyword to import the variables into the function scope.
 
-Any class or function declared in a module will be globally assessable.
+__WARNING:__ Any class or function declared in a module will be globally assessable. As in the example it is recommended for you to use a `namespace` to isolate any classes or functions defined in the module.
 
 The module system is implemented in the `$require("php-require")` module.
 
 ## File Modules
 
-If the exact filename is not found, then node will attempt to load the
+If the exact filename is not found, then __php-require__ will attempt to load the
 required filename with the added extension of `.php`.
 
 A module prefixed with `'/'` is an absolute path to the file.  For
@@ -113,7 +119,7 @@ If it is not found there, then it moves to the parent directory, and so
 on, until the root of the tree is reached.
 
 For example, if the file at `'/home/ry/projects/foo.php'` called
-`$require('bar.php')`, then node would look in the following locations, in
+`$require('bar.php')`, then __php-require__ would look in the following locations, in
 this order:
 
 * `/home/ry/projects/node_modules/bar.php`

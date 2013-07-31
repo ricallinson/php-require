@@ -35,7 +35,7 @@ for ($i = 0; $i < $cycle; $i++) {
     $class->fn();
 }
 
-print(round(measure($start), 5) . "\n");
+print("Class: " . round(measure($start), 5) . "\n");
 
 /*
     Nodejs style module with PhpClass.
@@ -51,7 +51,7 @@ for ($i = 0; $i < $cycle; $i++) {
     $module->fn();
 }
 
-print(round(measure($start), 5) . "\n");
+print("Class via exports: " . round(measure($start), 5) . "\n");
 
 /*
     Nodejs style module Function.
@@ -67,6 +67,6 @@ for ($i = 0; $i < $cycle; $i++) {
     $module["fn"]();
 }
 
-print(round(measure($start), 5) . "\n");
+print("Anonymous function via exports: " . round(measure($start), 5) . "\n");
 
 echo "Done\n";
