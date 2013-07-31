@@ -1,7 +1,11 @@
 <?php
 use php_require\Module;
+use php_require\php_path\Path;
 
 require("../index.php");
+
+$prime = new Module(null, null);
+// $pathlib = new Module("php-path");
 
 describe("php-require", function () {
 
@@ -24,7 +28,8 @@ describe("Module::resolveFilename()", function () {
     $method = new ReflectionMethod("php_require\Module", "resolveFilename");
     $method->setAccessible(true);
 
-    $parent = new Module(Module::$pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php"), null);
+    $pathlib = new Path();
+    $parent = new Module($pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
         assert(method_exists("php_require\Module", "resolveFilename"));
@@ -36,36 +41,36 @@ describe("Module::resolveFilename()", function () {
         assert($path === "/path/not/found");
     });
 
-    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
-        $request = Module::$pathlib->join(__DIR__, "../fixtures/node_modules/math");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent, $pathlib) {
+        $request = $pathlib->join(__DIR__, "../fixtures/node_modules/math");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
         assert(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false);
     });
 
-    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
-        $request = Module::$pathlib->join(__DIR__, "../fixtures/node_modules/math/index");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent, $pathlib) {
+        $request = $pathlib->join(__DIR__, "../fixtures/node_modules/math/index");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
         assert(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false);
     });
 
-    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
-        $request = Module::$pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent, $pathlib) {
+        $request = $pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
         assert(strrpos($path, "/php-require/test/fixtures/node_modules/math/index.php") !== false);
     });
 
-    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent) {
-        $request = Module::$pathlib->join(__DIR__, "../fixtures/node_modules/tester/refect");
+    it("should return /php-require/test/fixtures/node_modules/math/index.php", function () use ($method, $parent, $pathlib) {
+        $request = $pathlib->join(__DIR__, "../fixtures/node_modules/tester/refect");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
         assert(strrpos($path, "/php-require/test/fixtures/node_modules/tester/refect.php") !== false);
     });
 
-    it("should return /php-require/test/fixtures/config.json", function () use ($method, $parent) {
-        $request = Module::$pathlib->join(__DIR__, "../fixtures/config.json");
+    it("should return /php-require/test/fixtures/config.json", function () use ($method, $parent, $pathlib) {
+        $request = $pathlib->join(__DIR__, "../fixtures/config.json");
         // $paths = Module::resolveFilename($request);
         $path = $method->invoke(new Module(null, null), $request, $parent);
         assert(strrpos($path, "/php-require/test/fixtures/config.json") !== false);
@@ -118,7 +123,8 @@ describe("Module::nodeModulePaths()", function () {
 
 describe("Module::loadModule()", function () {
 
-    $parent = new Module(Module::$pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php"), null);
+    $pathlib = new Path();
+    $parent = new Module($pathlib->join(__DIR__, "../fixtures/node_modules/math/index.php"), null);
 
     it("should return a function", function () {
         assert(method_exists("php_require\Module", "loadModule"));
@@ -144,12 +150,14 @@ describe("module->compile()", function () {
     });
 
     it("should return 2", function () {
-        $module = new Module(Module::$pathlib->join(__DIR__, "../fixtures/node_modules/tester/refect.php"), null);
+
+        $pathlib = new Path();
+        $module = new Module($pathlib->join(__DIR__, "../fixtures/node_modules/tester/refect.php"), null);
         assert(count($module->exports) === 0);
         $module->compile();
         assert(count($module->exports) === 2);
 
         assert($module->exports["filename"] === $module->filename);
-        assert($module->exports["dirname"] === Module::$pathlib->dirname($module->filename));
+        assert($module->exports["dirname"] === $pathlib->dirname($module->filename));
     });
 });

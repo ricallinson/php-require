@@ -2,14 +2,6 @@
 namespace php_require;
 
 /*
-    Import php-path so we can use it outside of php-require.
-*/
-
-use php_require\php_path\Path;
-$module = new \stdClass();
-require("php-path" . DIRECTORY_SEPARATOR . "index.php");
-
-/*
     A Class that provides a nodejs style module loader so PHP can use npm.
 
     (This may not be a good idea!).
@@ -18,10 +10,16 @@ require("php-path" . DIRECTORY_SEPARATOR . "index.php");
 class Module {
 
     /*
-        Path object.
+        Used as a semaphore while loading native modules required by php-require.
     */
 
-    public static $pathlib = null;
+    public static $nativeModulesLoaded = false;
+
+    /*
+        List of native modules to load before php-require can be used.
+    */
+
+    public static $nativeModules = array("php-path");
 
     /*
         Cache of the loaded modules.
@@ -39,7 +37,7 @@ class Module {
         Paths
     */
 
-    private $paths = null;
+    private $paths = array();
 
     /*
         The actual module.
@@ -83,17 +81,51 @@ class Module {
 
     function __construct($filename, $parent) {
 
-        if (Module::$pathlib === null) {
-            Module::$pathlib = new Path();
+        if (Module::$nativeModulesLoaded === false) {
+
+            /*
+                This code block is only called once.
+            */
+
+            Module::$nativeModulesLoaded = "loading";
+            $this->loadNativeModules();
+            Module::$nativeModulesLoaded = true;
+        }
+
+        if (!$filename) {
+            return;
         }
 
         $this->id = $filename;
         $this->parent = $parent;
         $this->filename = $filename;
-        $this->paths = Module::nodeModulePaths(Module::$pathlib->dirname($filename));
+
+        if (Module::$nativeModulesLoaded === true) {
+
+            /*
+                We can only call Module::nodeModulePaths() once all native modules have loaded.
+            */
+
+            $this->paths = Module::nodeModulePaths(dirname($filename));
+        }
 
         if ($parent) {
              array_push($parent->children, $this);
+        }
+    }
+
+    /*
+        Loads native modules.
+    */
+
+    private function loadNativeModules() {
+
+        foreach (Module::$nativeModules as $request) {
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
+            $module = new Module($filename, $this);
+            Module::$cache[$filename] = $module;
+            $module->compile();
+            $module->loaded = true;
         }
     }
 
@@ -105,6 +137,7 @@ class Module {
 
     private static function resolveFilename($request, $parent) {
 
+        $pathlib = Module::loadModule("php-path");
         $paths = array();
 
         if ($request[0] == DIRECTORY_SEPARATOR) {
@@ -112,24 +145,24 @@ class Module {
             $paths = array($request);
         } else if ($request[0] == ".") {
             // If $request starts with a "." then resolve it.
-            $paths = array(Module::$pathlib->join(Module::$pathlib->dirname($parent->filename), $request));
+            $paths = array($pathlib->join($pathlib->dirname($parent->filename), $request));
         } else {
             // If request starts with neither then check the parent.
             foreach ($parent->paths as $path) {
-                array_push($paths, Module::$pathlib->join($path, $request));
+                array_push($paths, $pathlib->join($path, $request));
             }
         }
 
         foreach ($paths as $root) {
-            $abspath = Module::$pathlib->normalize($root . ".php");
+            $abspath = $pathlib->normalize($root . ".php");
             if (file_exists($abspath)) {
                 return $abspath;
             }
-            $abspath = Module::$pathlib->join($root, "index.php");
+            $abspath = $pathlib->join($root, "index.php");
             if (file_exists($abspath)) {
                 return $abspath;
             }
-            $abspath = Module::$pathlib->normalize($root);
+            $abspath = $pathlib->normalize($root);
             if (file_exists($abspath)) {
                 return $abspath;
             }
@@ -146,8 +179,10 @@ class Module {
 
     private static function nodeModulePaths($from) {
 
+        $pathlib = Module::loadModule("php-path");
+
         // guarantee that 'from' is absolute.
-        $from = Module::$pathlib->normalize($from);
+        $from = $pathlib->normalize($from);
 
         // note: this approach *only* works when the path is guaranteed
         // to be absolute.  Doing a fully-edge-case-correct path.split
@@ -171,9 +206,13 @@ class Module {
         Load a module (this is the require function).
     */
 
-    public static function loadModule($request, $parent, $isMain) {
+    public static function loadModule($request, $parent=null, $isMain=false) {
 
-        $filename = Module::resolveFilename($request, $parent);
+        if (in_array($request, Module::$nativeModules)) {
+            $filename = __DIR__ . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
+        } else {
+            $filename = Module::resolveFilename($request, $parent);
+        }
 
         if (isset(Module::$cache[$filename])) {
             return Module::$cache[$filename]->exports;
@@ -207,11 +246,13 @@ class Module {
 
     private function load() {
 
+        $pathlib = Module::loadModule("php-path");
+
         if ($this->loaded) {
             throw new Exception("the module " . $this->filename . " has already been loaded.");
         }
 
-        $extension = Module::$pathlib->extname($this->filename);
+        $extension = $pathlib->extname($this->filename);
 
         if (!isset(Module::$extensions[$extension])) {
             $extension = '.php';
@@ -233,7 +274,7 @@ class Module {
         };
 
         $__filename = $this->filename;
-        $__dirname = Module::$pathlib->dirname($this->filename);
+        $__dirname = dirname($this->filename);
 
         $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
             require($__filename);
@@ -260,9 +301,8 @@ Module::$extensions[".json"] = function ($module, $filename) {
     Setup the first $require() function.
 */
 
-Module::$pathlib = new Path();
-$__filename = Module::$pathlib->join($_SERVER["DOCUMENT_ROOT"], $_SERVER["SCRIPT_NAME"]);
-$__dirname = Module::$pathlib->dirname($__filename);
+$__filename = $_SERVER["DOCUMENT_ROOT"] . $_SERVER["SCRIPT_NAME"];
+$__dirname = dirname($__filename);
 $require = function ($request) use($__filename) {
     $parent = new Module($__filename, null);
     return Module::loadModule($request, $parent, true);
