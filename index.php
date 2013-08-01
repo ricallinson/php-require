@@ -10,16 +10,16 @@ namespace php_require;
 class Module {
 
     /*
-        Used as a semaphore while loading native modules required by php-require.
+        Used as a semaphore while loading core modules required by php-require.
     */
 
-    public static $nativeModulesLoaded = false;
+    public static $coreModulesLoaded = false;
 
     /*
-        List of native modules to load before php-require can be used.
+        List of core modules to load before php-require can be used.
     */
 
-    public static $nativeModules = array("php-path");
+    public static $coreModules = array("php-path");
 
     /*
         Cache of the loaded modules.
@@ -81,15 +81,15 @@ class Module {
 
     function __construct($filename, $parent) {
 
-        if (Module::$nativeModulesLoaded === false) {
+        if (Module::$coreModulesLoaded === false) {
 
             /*
                 This code block is only called once.
             */
 
-            Module::$nativeModulesLoaded = "loading";
+            Module::$coreModulesLoaded = "loading";
             $this->loadNativeModules();
-            Module::$nativeModulesLoaded = true;
+            Module::$coreModulesLoaded = true;
         }
 
         if (!$filename) {
@@ -100,10 +100,10 @@ class Module {
         $this->parent = $parent;
         $this->filename = $filename;
 
-        if (Module::$nativeModulesLoaded === true) {
+        if (Module::$coreModulesLoaded === true) {
 
             /*
-                We can only call Module::nodeModulePaths() once all native modules have loaded.
+                We can only call Module::nodeModulePaths() once all core modules have loaded.
             */
 
             $this->paths = Module::nodeModulePaths(dirname($filename));
@@ -115,12 +115,12 @@ class Module {
     }
 
     /*
-        Loads native modules.
+        Loads core modules.
     */
 
     private function loadNativeModules() {
 
-        foreach (Module::$nativeModules as $request) {
+        foreach (Module::$coreModules as $request) {
             $filename = __DIR__ . DIRECTORY_SEPARATOR . "node_modules" . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
             $module = new Module($filename, $this);
             Module::$cache[$filename] = $module;
@@ -208,7 +208,7 @@ class Module {
 
     public static function loadModule($request, $parent=null, $isMain=false) {
 
-        if (in_array($request, Module::$nativeModules)) {
+        if (in_array($request, Module::$coreModules)) {
             $filename = __DIR__ . DIRECTORY_SEPARATOR . "node_modules" . DIRECTORY_SEPARATOR . $request . DIRECTORY_SEPARATOR . "index.php";
         } else {
             $filename = Module::resolveFilename($request, $parent);
@@ -277,7 +277,7 @@ class Module {
         $__dirname = dirname($this->filename);
 
         $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
-            require($__filename);
+            include($__filename);
         };
 
         $fn($__filename, $__dirname, $this->exports, $this, $require);

@@ -89,6 +89,14 @@ __WARNING:__ Any class or function declared in a module will be globally assessa
 
 The module system is implemented in the `$require("php-require")` module.
 
+## Core Modules
+
+__Php-require__ has several modules packaged with it. These modules are described in greater detail elsewhere.
+
+The core modules are pulled into __Php-require__ via it's `package.json` file.
+
+Core modules are always preferentially loaded if their identifier is passed to require(). For instance, require('php-path') will always return the built in `php-path` module, even if there is a file by that name.
+
 ## File Modules
 
 If the exact filename is not found, then __php-require__ will attempt to load the
@@ -105,8 +113,7 @@ That is, `circle.php` must be in the same directory as `foo.php` for
 Without a leading '/' or './' to indicate a file, the module is loaded 
 from a `node_modules` folder.
 
-If the given path does not exist, `$require()` will produce a fatal 
-_E_COMPILE_ERROR_ level error.
+If the given path does not exist, `$require()` will produce an _E_WARNING_ level error which will allow the script to continue.
 
 ## Loading from `node_modules` Folders
 
