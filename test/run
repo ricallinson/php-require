@@ -1,3 +1,2 @@
-cd ./test
-php index.php
+php ./node_modules/.bin/tester
 exit $?
