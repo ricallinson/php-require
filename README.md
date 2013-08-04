@@ -113,7 +113,7 @@ That is, `circle.php` must be in the same directory as `foo.php` for
 Without a leading '/' or './' to indicate a file, the module is loaded 
 from a `node_modules` folder.
 
-If the given path does not exist, `$require()` will produce an _E_WARNING_ level error which will allow the script to continue.
+If the given path does not exist, `$require()` will `log` an error which will allow the script to continue.
 
 ## Loading from `node_modules` Folders
 

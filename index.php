@@ -277,7 +277,12 @@ class Module {
         $__dirname = dirname($this->filename);
 
         $fn = function ($__filename, $__dirname, &$exports, &$module, $require) {
-            include($__filename);
+            if (is_file($__filename)) {
+                include($__filename);
+            } else {
+                // throw new \Exception("Module not found at: " . $__filename);
+                error_log("php-require: Module not found at: " . $__filename);
+            }
         };
 
         $fn($__filename, $__dirname, $this->exports, $this, $require);
