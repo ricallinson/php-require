@@ -33,10 +33,16 @@ describe("php-path", function () {
             assert($str === "/my/file.php");
         });
 
-        it("should return /", function () {
+        it("should return ./my/file.php", function () {
+            $path = new Path();
+            $str = $path->normalize("./my/dir/../file.php");
+            assert($str === "./my/file.php");
+        });
+
+        it("should return ./", function () {
             $path = new Path();
             $str = $path->normalize("./");
-            assert($str === "/");
+            assert($str === "./");
         });
 
         it("should return /", function () {

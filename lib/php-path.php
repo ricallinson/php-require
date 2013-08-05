@@ -9,12 +9,14 @@ class Path {
 
     public function normalize($path) {
 
-        if ($path[0]) {
-            $root = $path[0] == $this->sep ? $this->sep : "";
+        if ($path[0] === $this->sep) {
+            $root = $path[0];
+        } else if (strpos($path, "./") === 0) {
+            $root = "." . $this->sep;
         } else {
             $root = "";
         }
-        
+
         $parts = explode($this->sep, $path);
 
         foreach($parts as &$part) {
@@ -30,7 +32,7 @@ class Path {
             $arg = array_shift($parts);
             if ($arg == "..") {
                 array_pop($build);
-            } else if ($arg != ".") {
+            } else {
                 array_push($build, $arg);
             }
         }
