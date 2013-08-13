@@ -226,15 +226,11 @@ class Module {
 
         Module::$cache[$filename] = $module;
 
-        $hadException = true;
-
         try {
             $module->load();
-            $hadException = false;
-        } catch (Exception $e) {
-            if ($hadException) {
-                unset(Module::$cache[$filename]);
-            }
+        } catch (\Exception $e) {
+            unset(Module::$cache[$filename]);
+            error_log("The module at " . $filename . " threw an Exception:\n" . $e);
         }
 
         return $module->exports;
@@ -249,7 +245,7 @@ class Module {
         $pathlib = Module::loadModule("php-path");
 
         if ($this->loaded) {
-            throw new Exception("the module " . $this->filename . " has already been loaded.");
+            throw new \Exception("the module " . $this->filename . " has already been loaded.");
         }
 
         $extension = $pathlib->extname($this->filename);
@@ -299,7 +295,7 @@ Module::$extensions[".php"] = function ($module, $filename) {
 
 Module::$extensions[".json"] = function ($module, $filename) {
     $content = file_get_contents($filename);
-    $module->exports = $content;
+    $module->exports = json_decode($content, true);
 };
 
 /*

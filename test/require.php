@@ -12,13 +12,24 @@ $prime = new Module(null, null);
 
 describe("php-require", function () {
 
-    it("should return true", function () {
+    it("should return [true]", function () {
         assert(class_exists("php_require\Module"));
     });
 
-    it("should return /fake", function () {
+    it("should return [/fake]", function () {
         $module = new Module("/fake", null);
         assert($module->id === "/fake");
+    });
+
+    it("should return [DIRECTORY_SEPARATOR]", function () {
+        global $require;
+        $module = $require("php-path");
+        assert($module->sep === DIRECTORY_SEPARATOR);
+    });
+
+    it("should return []", function () {
+        $module = new Module(null, null);
+        assert($module === "");
     });
 });
 
@@ -137,6 +148,21 @@ describe("Module::loadModule()", function () {
         $module = Module::loadModule("math", $parent, false);
         assert(get_class($module["sum"]) === "Closure");
     });
+
+    it("should return [string] as main", function () use ($parent) {
+        $module = Module::loadModule("tester/refect", $parent, true);
+        assert($module["module"]->id === ".");
+    });
+
+    it("should return [2] after catching an exception", function () use ($parent) {
+        $module = Module::loadModule("tester/error", $parent);
+        assert(count($module) === 0);
+    });
+
+    it("should return [] after reading json", function () use ($parent) {
+        $module = Module::loadModule("tester/json.json", $parent);
+        assert($module["key"] === "val");
+    });
 });
 
 describe("module->load()", function () {
@@ -158,7 +184,7 @@ describe("module->compile()", function () {
         $module = new Module($pathlib->join(__DIR__, "./fixtures/node_modules/tester/refect.php"), null);
         assert(count($module->exports) === 0);
         $module->compile();
-        assert(count($module->exports) === 2);
+        assert(count($module->exports) === 3);
 
         assert($module->exports["filename"] === $module->filename);
         assert($module->exports["dirname"] === $pathlib->dirname($module->filename));

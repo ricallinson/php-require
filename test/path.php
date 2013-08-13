@@ -124,6 +124,48 @@ describe("php-path", function () {
         });
     });
 
+    describe("path->resolve()", function () {
+
+        it("should return [true]", function () {
+            $path = new Path();
+            $error = false;
+            try {
+                $path->resolve();
+            } catch (Exception $e) {
+                $error = true;
+            }
+            assert($error);
+        });
+    });
+
+    describe("path->isAbsolute()", function () {
+
+        it("should return [true]", function () {
+            $path = new Path();
+            $error = false;
+            try {
+                $path->isAbsolute();
+            } catch (Exception $e) {
+                $error = true;
+            }
+            assert($error);
+        });
+    });
+
+    describe("path->relative()", function () {
+
+        it("should return [true]", function () {
+            $path = new Path();
+            $error = false;
+            try {
+                $path->relative();
+            } catch (Exception $e) {
+                $error = true;
+            }
+            assert($error);
+        });
+    });
+
     describe("path->extname()", function () {
 
         it("should return .php", function () {
