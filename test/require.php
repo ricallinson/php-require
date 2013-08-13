@@ -29,7 +29,7 @@ describe("php-require", function () {
 
     it("should return []", function () {
         $module = new Module(null, null);
-        assert($module === "");
+        assert(get_class($module) === "php_require\Module");
     });
 });
 
